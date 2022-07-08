@@ -68,51 +68,10 @@ public final class ExternalBook {
     }
 
     public static <T> Collection<T> removeDuplicates(Collection<T> collection) {
-
-//        Collection<ExternalBook> listWithDuplicates = (List<ExternalBook>) collection;
-//
-//        Collection<ExternalBook> listWithoutDuplicates= new ArrayList<>(
-//                new HashSet<>(listWithDuplicates.stream().distinct().collect(Collectors.toList())));
-//
-//
-//
-//        return (Collection<T>) listWithoutDuplicates;
-//
-
-
-//        listWithDuplicates.stream().filter(e-> listWithDuplicates.stream().filter(o -> e.equals(collection))).
-
-
-
-//         newList.retainAll(collection);
-
-//         return newList;
-
-//        return collection.stream()
-//                .distinct()
-//                .collect(Collectors.toList());
-
-//        return new HashSet<>(collection);
-
-//
-//        return collection.stream().collect(Collectors.toSet()).stream()
-//                .distinct()
-//                .collect(Collectors.toList());
-
-//        Collection<ExternalBook> listWithDuplicates = (List<ExternalBook>) collection;
-//
-//        List<ExternalBook> listRemove = collection.stream().filter(distinctBy(book -> Arrays.asList()))
-//        return
-
         return collection.stream()
                 .distinct()
                 .collect(Collectors.toList());
 
-    }
-
-    private static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     @Override
@@ -135,46 +94,4 @@ public final class ExternalBook {
         return Objects.hash(bookAuthor,bookName, Arrays.hashCode(id));
     }
 
-    public static void main(String[] args) {
-
-        ExternalBook b1 = new ExternalBook( "Pepito Magics",
-                "lois Province",1);
-
-        ExternalBook b2 = new ExternalBook( "Marcel Magics",
-                "lois Province",2);
-
-        ExternalBook b3 = new ExternalBook( "Marcel Magics",
-                "lois Province",2);
-
-        ExternalBook b4 = new ExternalBook( "Pepito Magics",
-                "lois Province",1);
-
-        ExternalBook b5 = new ExternalBook( " Magics",
-                "lois Province",2);
-
-        ExternalBook b6 = new ExternalBook( "Marcel Magics",
-                "lois Province",2);
-
-        ExternalBook b7 = new ExternalBook( "Lois Magics",
-                "lois Province",2);
-
-
-        Collection<ExternalBook> list = List.of(b1, b2, b5,b6);
-        Collection<ExternalBook> list2 = List.of(b3, b4,b7,b6);
-
-
-        Collection<ExternalBook> newListRemove = List.of(b1, b2, b5,b6, b5, b6,b1,b3,b6,b4,b7,b1,b4);
-
-        Collection<ExternalBook> some = removeDuplicates(newListRemove);
-        System.out.println(removeDuplicates(newListRemove));
-        System.out.println(removeDuplicates(newListRemove).size());
-
-        Collection<ExternalBook> c = removeDuplicates(List.of(b2, b3));
-        boolean f = b2.equals(b3);
-
-        Collection<ExternalBook> finalList = findDuplicates(list,list2);
-
-        System.out.println(finalList.toString());
-
-    }
 }
