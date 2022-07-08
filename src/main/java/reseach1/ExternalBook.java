@@ -3,15 +3,14 @@ package reseach1;
 import lombok.*;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public final class ExternalBook {
 
     private String bookName;
@@ -24,6 +23,14 @@ public final class ExternalBook {
 
     private static int newId=1;
 
+    @Override
+    public String toString() {
+        return "\n" +
+                "Book name: '" + bookName + '\n' +
+                "Author='" + bookAuthor + '\n' +
+                "Data=" + Arrays.toString(customData) + '\n' +
+                "id=" + Arrays.toString(id) + '\n' ;
+    }
 
     public ExternalBook(String bookName, String bookAuthor ) {
         this.bookName = bookName;
@@ -50,7 +57,6 @@ public final class ExternalBook {
 
         for (ExternalBook coll1 : collOne){
             for (ExternalBook coll2: collTwo ){
-//                if (coll1.equals(coll2))
                 if (coll1.equals(coll2)) {
                     newList.add(coll1);
                     break;
@@ -59,6 +65,54 @@ public final class ExternalBook {
         }
 
         return newList;
+    }
+
+    public static <T> Collection<T> removeDuplicates(Collection<T> collection) {
+
+//        Collection<ExternalBook> listWithDuplicates = (List<ExternalBook>) collection;
+//
+//        Collection<ExternalBook> listWithoutDuplicates= new ArrayList<>(
+//                new HashSet<>(listWithDuplicates.stream().distinct().collect(Collectors.toList())));
+//
+//
+//
+//        return (Collection<T>) listWithoutDuplicates;
+//
+
+
+//        listWithDuplicates.stream().filter(e-> listWithDuplicates.stream().filter(o -> e.equals(collection))).
+
+
+
+//         newList.retainAll(collection);
+
+//         return newList;
+
+//        return collection.stream()
+//                .distinct()
+//                .collect(Collectors.toList());
+
+//        return new HashSet<>(collection);
+
+//
+//        return collection.stream().collect(Collectors.toSet()).stream()
+//                .distinct()
+//                .collect(Collectors.toList());
+
+//        Collection<ExternalBook> listWithDuplicates = (List<ExternalBook>) collection;
+//
+//        List<ExternalBook> listRemove = collection.stream().filter(distinctBy(book -> Arrays.asList()))
+//        return
+
+        return collection.stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+    }
+
+    private static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     @Override
@@ -71,75 +125,52 @@ public final class ExternalBook {
 
         ExternalBook book = (ExternalBook) obj;
 
-        boolean conditional = book.getBookName().equals(this.getBookName())
-                && book.getBookAuthor().equals(this.getBookAuthor())
-                && Arrays.equals(book.getId(), this.getId())
-                && Arrays.equals(book.getCustomData(), this.getCustomData());
-
-
-        return conditional;
+        return Objects.equals(book.getBookName(), this.bookName) &&
+                Objects.equals(book.getBookAuthor(), this.bookAuthor)
+                && Arrays.equals(book.getId(), this.id) &&
+                Arrays.equals(book.getCustomData(), this.customData);
     }
-
-
-//        collOne.retainAll(collTwo);
-//        List<ExternalBook> list1 = (List<ExternalBook>) collOne;
-//        List<ExternalBook> list2 = (List<ExternalBook>) collTwo;
-////
-////        list1.retainAll(list2);
-//
-//        System.out.println("similar " + list1);
-//
-//
-//
-//        return (List<ExternalBook>) collOne;
-//
-//        Collection<?> popo;
-//        popo.stream().allMatch( e-> collOne.equals(ExternalBook))
-
-
-//        Set<ExternalBook> items = new HashSet<>();
-
-//        Stream.of(collOne,collTwo).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
-//                .entrySet().stream().filter(m -> m.getKey() >1).map(Map.Entry::getKey).collect(Collectors.toSet());
-
-//        items.stream().collect(Collectors.groupingBy(Function.identity()))
-
-//    }
-
-
-    public static <T> Collection<T> removeDuplicates(Collection<T> collection) {
-        return null;
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookAuthor,bookName, Arrays.hashCode(id));
     }
-
-
 
     public static void main(String[] args) {
 
         ExternalBook b1 = new ExternalBook( "Pepito Magics",
-                "lois Province");
+                "lois Province",1);
 
         ExternalBook b2 = new ExternalBook( "Marcel Magics",
-                "lois Province");
+                "lois Province",2);
 
         ExternalBook b3 = new ExternalBook( "Marcel Magics",
-                "lois Province");
+                "lois Province",2);
+
         ExternalBook b4 = new ExternalBook( "Pepito Magics",
-                "lois Province");
+                "lois Province",1);
 
-//        ExternalBook b2 = new ExternalBook( "Ppepeito Magis",
-//                "lois Province");
-//
-//        ExternalBook b3 = new ExternalBook( "Ppepeito Magis",
-//                "lois Province");
-//
-//
-//        ExternalBook b4 = new ExternalBook( "Ppepeito Magis",
-//                "lois Province");
+        ExternalBook b5 = new ExternalBook( " Magics",
+                "lois Province",2);
+
+        ExternalBook b6 = new ExternalBook( "Marcel Magics",
+                "lois Province",2);
+
+        ExternalBook b7 = new ExternalBook( "Lois Magics",
+                "lois Province",2);
 
 
-        Collection<ExternalBook> list = List.of(b1, b2);
-        Collection<ExternalBook> list2 = List.of(b3, b4);
+        Collection<ExternalBook> list = List.of(b1, b2, b5,b6);
+        Collection<ExternalBook> list2 = List.of(b3, b4,b7,b6);
 
+
+        Collection<ExternalBook> newListRemove = List.of(b1, b2, b5,b6, b5, b6,b1,b3,b6,b4,b7,b1,b4);
+
+        Collection<ExternalBook> some = removeDuplicates(newListRemove);
+        System.out.println(removeDuplicates(newListRemove));
+        System.out.println(removeDuplicates(newListRemove).size());
+
+        Collection<ExternalBook> c = removeDuplicates(List.of(b2, b3));
+        boolean f = b2.equals(b3);
 
         Collection<ExternalBook> finalList = findDuplicates(list,list2);
 
