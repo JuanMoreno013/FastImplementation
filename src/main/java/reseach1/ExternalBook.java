@@ -3,9 +3,6 @@ package reseach1;
 import lombok.*;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Getter
@@ -14,14 +11,10 @@ import java.util.stream.Collectors;
 public final class ExternalBook {
 
     private String bookName;
-
     private String bookAuthor;
-
     private Object[] customData;
-
     private byte[] id;
-
-    private static int newId=1;
+    private static int newId = 1;
 
     @Override
     public String toString() {
@@ -29,34 +22,37 @@ public final class ExternalBook {
                 "Book name: '" + bookName + '\n' +
                 "Author='" + bookAuthor + '\n' +
                 "Data=" + Arrays.toString(customData) + '\n' +
-                "id=" + Arrays.toString(id) + '\n' ;
+                "id=" + Arrays.toString(id) + '\n';
     }
 
-    public ExternalBook(String bookName, String bookAuthor ) {
+    public ExternalBook(String bookName, String bookAuthor) {
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
         this.id = new byte[newId];
         newId++;
-
-//        this.customData = customData;
     }
 
-    public ExternalBook(String bookName, String bookAuthor, int id ) {
+    public ExternalBook(String bookName, String bookAuthor, int id) {
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
         this.id = new byte[id];
+    }
 
-//        this.customData = customData;
+    public ExternalBook(String bookName, String bookAuthor, int id, Object[] customData) {
+        this.bookName = bookName;
+        this.bookAuthor = bookAuthor;
+        this.id = new byte[id];
+        this.customData = customData;
     }
 
     public static List<ExternalBook> findDuplicates(Collection<ExternalBook> collOne, Collection<ExternalBook> collTwo) {
-    List<ExternalBook> newList = new ArrayList<>();
+        List<ExternalBook> newList = new ArrayList<>();
         if (collOne.size() != collTwo.size()) {
             return List.of();
         }
 
-        for (ExternalBook coll1 : collOne){
-            for (ExternalBook coll2: collTwo ){
+        for (ExternalBook coll1 : collOne) {
+            for (ExternalBook coll2 : collTwo) {
                 if (coll1.equals(coll2)) {
                     newList.add(coll1);
                     break;
@@ -89,9 +85,10 @@ public final class ExternalBook {
                 && Arrays.equals(book.getId(), this.id) &&
                 Arrays.equals(book.getCustomData(), this.customData);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(bookAuthor,bookName, Arrays.hashCode(id));
+        return Objects.hash(bookAuthor, bookName, Arrays.hashCode(id), Arrays.hashCode(customData));
     }
 
 }
