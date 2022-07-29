@@ -1,10 +1,10 @@
 package reseach1;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -18,8 +18,8 @@ class ExternalBookTest {
     static ExternalBook b2 = new ExternalBook("Pepito Magics",
             "lois Province");
 
-    static ExternalBook b3 = new ExternalBook("Pepito oisd",
-            "lois menis");
+    static ExternalBook b3 = new ExternalBook("Pepito isd",
+            "lois menus");
 
     static ExternalBook b4 = new ExternalBook("Pepito ",
             "lois Province");
@@ -48,6 +48,78 @@ class ExternalBookTest {
             "lois Province", 2, new Object[1234]);
 
     @Test
+    @DisplayName("Remove Duplicate, shows the current time of execution, when you implement this method")
+    void removeDuplicateTest() {
+
+        List<ExternalBook> listRemove = List.of(b1, b2, b3, b4, b11, b12, b13, b3, b14, b15, b2, b2, b1, b16);
+
+        long startTime = System.currentTimeMillis();
+        System.out.println("Initial time: " + startTime / 1000d + "s");
+
+        Collection<ExternalBook> books = ExternalBook.removeDuplicates(listRemove);
+
+        long finalTime = System.currentTimeMillis();
+        System.out.println("Final time: " + finalTime / 1000d + "s");
+
+        System.out.println("Time passed: " + (finalTime - startTime) / 1000d + "s");
+        System.out.println("Duplicated books removed: " + books.size());
+
+    }
+
+
+    @Test
+    @DisplayName("Find Duplicate, shows the current time of execution, when you implement this method")
+    void findDuplicatesTest() {
+
+        long startTime = System.currentTimeMillis();
+        System.out.println("Initial time: " + startTime);
+
+        List<ExternalBook> collOne = List.of(b1, b2, b3, b4, b11, b12, b13, b3, b14, b15, b2, b2, b1, b16, b11, b12, b13, b3, b14, b22);
+        List<ExternalBook> collTwo = List.of(b1, b2, b3, b11, b12, b13, b4, b21, b12, b13, b3, b14, b15, b2, b2, b22, b16, b3, b14, b21);
+
+        Collection<ExternalBook> books = ExternalBook.findDuplicates(collOne, collTwo);
+
+        long finalTime = System.currentTimeMillis();
+        System.out.println("Final time: " + finalTime);
+
+        System.out.println("Time passed: " + (finalTime - startTime) / 1000d + "s");
+        System.out.println("Duplicated books found: " + books.size());
+
+    }
+
+    private List<BookDecorator> transformExternalBooks(final List<ExternalBook> externalBookList) {
+
+        List<BookDecorator> decoratorBookList = new ArrayList<>();
+
+        for (ExternalBook externalBook : externalBookList) {
+            BookDecorator newBookDecorator = new BookDecorator(externalBook);
+            decoratorBookList.add(newBookDecorator);
+        }
+        return decoratorBookList;
+    }
+
+    @Test
+    @DisplayName("Remove Duplicate Decorator, shows the current time of execution, when you implement this method")
+    void removeDuplicateTest2() {
+
+        List<ExternalBook> listRemove = List.of(b1, b2, b3, b4, b11, b12, b13, b3, b14, b15, b2, b2, b1, b16);
+        Collection<BookDecorator> newList = transformExternalBooks(listRemove);
+
+
+        long startTime = System.currentTimeMillis();
+        System.out.println("Initial time: " + startTime / 1000d + "s");
+
+        Collection<BookDecorator> books = BookDecorator.removeDuplicates(newList);
+
+        long finalTime = System.currentTimeMillis();
+        System.out.println("Final time: " + finalTime / 1000d + "s");
+
+        System.out.println("Time passed: " + (finalTime - startTime) / 1000d + "s");
+        System.out.println("Duplicated books removed: " + books.size());
+
+    }
+
+    @Test
     @DisplayName("Book 2, the size of the new list are 0, when there is not books duplicates")
     void Book2() {
         List<ExternalBook> list = List.of(b1, b2);
@@ -63,14 +135,6 @@ class ExternalBookTest {
         List<ExternalBook> list2 = List.of(b3, b4, b12);
 
         assertEquals(1, ExternalBook.findDuplicates(list, list2).size());
-
-//        long startTime = System.currentTimeMillis();
-//        ExternalBook.findDuplicates(list, list2);
-//        long timeAfter = System.currentTimeMillis();
-//        long estimatedTime = timeAfter - startTime;
-//        System.out.println("Time estimated " + estimatedTime);
-
-        Object returnValue = TimeIT.printTime(() -> ExternalBook.findDuplicates(list, list2));
     }
 
 
@@ -92,9 +156,9 @@ class ExternalBookTest {
             list2.add(b3);
             list2.add(b4);
             list.add(b12);
-
         }
-        Object returnValue = TimeIT.printTime(() -> ExternalBook.findDuplicates(list, list2));
+
+        ExternalBook.findDuplicates(list, list2);
 
         long timeAfter = System.currentTimeMillis();
         long estimatedTime = timeAfter - startTime;
@@ -151,7 +215,8 @@ class ExternalBookTest {
 
         ExternalBook.removeDuplicates(list);
         long estimatedTime = System.currentTimeMillis() - startTime;
-        System.out.println(estimatedTime);
+        System.out.println("Time estimated with a list of 10 000 elements: " + estimatedTime);
+
 
     }
 
@@ -181,7 +246,7 @@ class ExternalBookTest {
     }
 
     @Test
-    @DisplayName("Book using Decorator, the size of the new list are 3, when remove books duplicates")
+    @DisplayName("Remove Books Decorator duplicates, the size of the new list are 3, when remove books duplicates")
     void BookDecorator2() {
 
         ExternalBook book2Dec = new ExternalBook("Bag",
