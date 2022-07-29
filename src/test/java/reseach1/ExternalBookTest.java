@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -13,40 +12,39 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExternalBookTest {
 
-    ExternalBook b1 = new ExternalBook("Pepito Magics",
+    static ExternalBook b1 = new ExternalBook("Pepito Magics",
             "lois Province");
 
-    ExternalBook b2 = new ExternalBook("Pepito Magics",
+    static ExternalBook b2 = new ExternalBook("Pepito Magics",
             "lois Province");
 
-    ExternalBook b3 = new ExternalBook("Pepito oisd",
+    static ExternalBook b3 = new ExternalBook("Pepito oisd",
             "lois menis");
 
-    ExternalBook b4 = new ExternalBook("Pepito Magics",
+    static ExternalBook b4 = new ExternalBook("Pepito ",
             "lois Province");
 
-    ExternalBook b11 = new ExternalBook("Pepito Magics",
+    static ExternalBook b11 = new ExternalBook("Pepito Magics",
             "lois Province", 1);
 
-    ExternalBook b12 = new ExternalBook("Pepito Magics",
+    static ExternalBook b12 = new ExternalBook("Pepito Magics",
+            "lois Province", 1);
+    static ExternalBook b13 = new ExternalBook("Marcel Magics",
+            "lois Province", 2);
+
+    static ExternalBook b14 = new ExternalBook("Marcel Magics",
+            "lois Province", 2);
+
+    static ExternalBook b15 = new ExternalBook("Pepito Magics",
             "lois Province", 1);
 
-    ExternalBook b13 = new ExternalBook("Marcel Magics",
+    static ExternalBook b16 = new ExternalBook(" Magics",
             "lois Province", 2);
 
-    ExternalBook b14 = new ExternalBook("Marcel Magics",
-            "lois Province", 2);
-
-    ExternalBook b15 = new ExternalBook("Pepito Magics",
-            "lois Province", 1);
-
-    ExternalBook b16 = new ExternalBook(" Magics",
-            "lois Province", 2);
-
-    ExternalBook b21 = new ExternalBook(" Magics",
+    static ExternalBook b21 = new ExternalBook(" Magics",
             "lois Province", 2, new Object[1234]);
 
-    ExternalBook b22 = new ExternalBook(" Roll Bag",
+    static ExternalBook b22 = new ExternalBook(" Roll Bag",
             "lois Province", 2, new Object[1234]);
 
     @Test
@@ -64,11 +62,20 @@ class ExternalBookTest {
         List<ExternalBook> list = List.of(b1, b2, b11);
         List<ExternalBook> list2 = List.of(b3, b4, b12);
 
-        assertEquals(2, ExternalBook.findDuplicates(list, list2).size());
+        assertEquals(1, ExternalBook.findDuplicates(list, list2).size());
+
+//        long startTime = System.currentTimeMillis();
+//        ExternalBook.findDuplicates(list, list2);
+//        long timeAfter = System.currentTimeMillis();
+//        long estimatedTime = timeAfter - startTime;
+//        System.out.println("Time estimated " + estimatedTime);
+
+        Object returnValue = TimeIT.printTime(() -> ExternalBook.findDuplicates(list, list2));
     }
 
+
     @Test
-    @DisplayName("Book 4, show the time to execution to find duplicates, when the both list has 10 000 000 elements ")
+    @DisplayName("Book 4, show the time to execution to find duplicates, when the both list of 10 000 000 elements ")
     void Book4() {
 
 
@@ -87,16 +94,17 @@ class ExternalBookTest {
             list.add(b12);
 
         }
-        ExternalBook.findDuplicates(list, list2);
+        Object returnValue = TimeIT.printTime(() -> ExternalBook.findDuplicates(list, list2));
 
-        long estimatedTime = System.currentTimeMillis() - startTime;
-        System.out.println(estimatedTime);
+        long timeAfter = System.currentTimeMillis();
+        long estimatedTime = timeAfter - startTime;
+        System.out.println("Time estimated with a list 10 million elements " + estimatedTime);
 
     }
 
 
     @Test
-    @DisplayName("Book 5, show the time to execution to find duplicates, when the both list has 1000 elements ")
+    @DisplayName("Book 5, show the time to execution to find duplicates, when the both list of 1000 elements ")
     void Book5() {
         List<ExternalBook> list = new ArrayList<>();
         List<ExternalBook> list2 = new ArrayList<>();
@@ -115,13 +123,14 @@ class ExternalBookTest {
         }
         ExternalBook.findDuplicates(list, list2);
 
-        long estimatedTime = System.currentTimeMillis() - startTime;
-        System.out.println(estimatedTime);
+        long timeAfter = System.currentTimeMillis();
+        long estimatedTime = timeAfter - startTime;
+        System.out.println("Time estimated with a list of 1000 elements: " + estimatedTime);
 
     }
 
     @Test
-    @DisplayName("Book 6, show the time from remove the duplicates, when the collection has 10 000 elements ")
+    @DisplayName("Book 6, show the time from remove the duplicates, when the collection of 10 000 elements ")
     void Book6() {
         List<ExternalBook> list = new ArrayList<>();
 
@@ -150,8 +159,8 @@ class ExternalBookTest {
     @DisplayName("Book 7, the size of the new list are 6, when remove duplicates elements")
     void Book7() {
 
-        List<ExternalBook> list = List.of(b1, b2, b3, b4, b11, b12, b13, b3, b14, b15, b2, b2, b1, b16);
-        List<ExternalBook> newList = (List<ExternalBook>) ExternalBook.removeDuplicates(list);
+        List<ExternalBook> listRemove = List.of(b1, b2, b3, b4, b11, b12, b13, b3, b14, b15, b2, b2, b1, b16);
+        List<ExternalBook> newList = (List<ExternalBook>) ExternalBook.removeDuplicates(listRemove);
 
         assertEquals(6, newList.size());
     }

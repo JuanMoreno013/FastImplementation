@@ -3,6 +3,7 @@ package reseach1;
 import lombok.*;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Getter
@@ -44,23 +45,13 @@ public final class ExternalBook {
         this.id = new byte[id];
         this.customData = customData;
     }
-
     public static List<ExternalBook> findDuplicates(Collection<ExternalBook> collOne, Collection<ExternalBook> collTwo) {
-        List<ExternalBook> newList = new ArrayList<>();
-        if (collOne.size() != collTwo.size()) {
-            return List.of();
-        }
 
-        for (ExternalBook coll1 : collOne) {
-            for (ExternalBook coll2 : collTwo) {
-                if (coll1.equals(coll2)) {
-                    newList.add(coll1);
-                    break;
-                }
-            }
-        }
+        Set<ExternalBook> items = new HashSet<>(collOne);
+        items.retainAll(collTwo);
 
-        return newList;
+        return new ArrayList<>(items);
+
     }
 
     public static <T> Collection<T> removeDuplicates(Collection<T> collection) {
